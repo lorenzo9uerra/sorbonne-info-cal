@@ -27,11 +27,8 @@ def save_ics_from_response(response, filename):
     icsfile.close()
 
 course_code = input("Code of the course to be fetched [RES/M2_RES]: ")
-filename = input("Calendar filename [calendar.ics]: ")
 if not course_code:
     course_code = "RES/M2_RES"
-if not filename:
-    filename = "calendar.ics"
 
 response = fetch_cal(course_code)
-save_ics_from_response(response, filename)
+save_ics_from_response(response, course_code.replace("/", "-")+".ics")

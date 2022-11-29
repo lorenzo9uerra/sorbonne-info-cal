@@ -16,4 +16,4 @@ courses, a correct code should be something like `BIM/M1_BIM`, so take the name
 of the master and, separated with a slash, append the name of the course.
 
 That's it, the script will fetch the events and save them in an .ics file with
-the name you wanted.
+the name of the master and course you wanted.
