@@ -26,9 +26,15 @@ def save_ics_from_response(response, filename):
             icsfile.write(el.text)
     icsfile.close()
 
-course_code = input("Code of the course to be fetched [RES/M2_RES]: ")
-if not course_code:
-    course_code = "RES/M2_RES"
+course_code = input("Code of the course to be fetched: ")
+if len(course_code) < 6 or "/" not in course_code:
+    print("Input a valid course code")
+    exit()
 
 response = fetch_cal(course_code)
-save_ics_from_response(response, course_code.replace("/", "-")+".ics")
+
+if response.ok:
+    save_ics_from_response(response, course_code.replace("/", "-")+".ics")
+    print("DONE :)")
+else:
+    print("The specified code of the course is not valid, check again")

@@ -1,6 +1,6 @@
 # sorbonne-info-cal
 
-Simple python script to fetch the calendar of a course and save it as .ics file, so
+Low effort python script to fetch the calendar of a course and save it as .ics file, so
 it can be imported in various calendar clients.
 
 
