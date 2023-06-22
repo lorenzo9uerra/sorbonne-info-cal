@@ -12,8 +12,7 @@ course_list = [
     'IMA/M2_IMA',
     'IQ/M1_IQ',
     'IQ/M2_IQ',
-    'MasterInfo/calendar',
-    'MasterInfo/M1',
+    'MasterInfo/calendar', 'MasterInfo/M1',
     'MasterInfo/M2',
     'RES/M1_RES',
     'RES/M1_RES-EIT-Digital',
@@ -44,7 +43,7 @@ def ask_cc():
         print(f"{i}: {code}")
         i+=1
     nlist = int(input("Choose the number of the calendar to be fetched: "))
-    if nlist >= 1 and nlist < len(course_list):
+    if nlist >= 1 and nlist <= len(course_list):
         return course_list[nlist]
     else:
         print("The calendar specified is not present in the list")
