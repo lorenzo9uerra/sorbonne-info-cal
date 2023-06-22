@@ -1,6 +1,55 @@
 import requests
 from xml.etree import cElementTree as ET
 
+course_list = [
+    'ANDROIDE/M1_ANDROIDE',
+    'ANDROIDE/M2_ANDROIDE',
+    'BIM/M1_BIM',
+    'BIM/M2_BIM',
+    'DAC/M1_DAC',
+    'DAC/M2_DAC',
+    'IMA/M1_IMA',
+    'IMA/M2_IMA',
+    'IQ/M1_IQ',
+    'IQ/M2_IQ',
+    'MasterInfo/calendar',
+    'MasterInfo/M1',
+    'MasterInfo/M2',
+    'RES/M1_RES',
+    'RES/M1_RES-EIT-Digital',
+    'RES/M1_RES-ITECIA',
+    'RES/M1_RES-ITESCIA',
+    'RES/M2_RES',
+    'RES/M2_RES-EIT-Digital',
+    'RES/M2_RES-INSTA',
+    'RES/M2_RES-ITECIA',
+    'RES/M2_RES-ITESCIA',
+    'SAR/M1_SAR',
+    'SAR/M2_SAR',
+    'SESI/M1_SESI',
+    'SESI/M2_SESI',
+    'SFPN/M1_SFPN',
+    'SFPN/M1_SFPN-AFTI',
+    'SFPN/M2_SFPN',
+    'SFPN/M2_SFPN-AFTI',
+    'STL/M1_STL',
+    'STL/M2_STL',
+    'STL/M2_STL-INSTA'
+    ]
+
+def ask_cc():
+    i = 1
+    print("Code of the course to be fetched: ")
+    for code in course_list:
+        print(f"{i}: {code}")
+        i+=1
+    nlist = int(input("Choose the number of the calendar to be fetched: "))
+    if nlist >= 1 and nlist < len(course_list):
+        return course_list[nlist]
+    else:
+        print("The calendar specified is not present in the list")
+        return ""
+
 def fetch_cal(course_code):
     headers = {
             "Content-Type": "text/xml; charset=utf-8",
@@ -26,11 +75,7 @@ def save_ics_from_response(response, filename):
             icsfile.write(el.text)
     icsfile.close()
 
-course_code = input("Code of the course to be fetched: ")
-if len(course_code) < 6 or "/" not in course_code:
-    print("Input a valid course code")
-    exit()
-
+course_code = ask_cc()
 response = fetch_cal(course_code)
 
 if response.ok:
