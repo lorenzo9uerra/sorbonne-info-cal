@@ -61,7 +61,7 @@ def fetch_cal(course_code):
             "Sec-Fetch-Site": "same-origin"
             }
     url = f"https://cal.ufr-info-p6.jussieu.fr/caldav.php/{course_code}/"
-    data = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><L:calendar-query xmlns:L=\"urn:ietf:params:xml:ns:caldav\"><D:prop xmlns:D=\"DAV:\"><D:getcontenttype/><D:getetag/><L:calendar-data/></D:prop><L:filter><L:comp-filter name=\"VCALENDAR\"><L:comp-filter name=\"VEVENT\"><L:time-range start=\"20220725T000000Z\" end=\"20230315T000000Z\"/></L:comp-filter></L:comp-filter></L:filter></L:calendar-query>"
+    data = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><L:calendar-query xmlns:L=\"urn:ietf:params:xml:ns:caldav\"><D:prop xmlns:D=\"DAV:\"><D:getcontenttype/><D:getetag/><L:calendar-data/></D:prop><L:filter><L:comp-filter name=\"VCALENDAR\"><L:comp-filter name=\"VEVENT\"><L:time-range start=\"20230624T000000Z\" end=\"20240215T000000Z\"/></L:comp-filter></L:comp-filter></L:filter></L:calendar-query>"
 
     return requests.request(method="REPORT",url=url,headers=headers, data=data)
 
@@ -73,6 +73,38 @@ def save_ics_from_response(response, filename):
         if el.text:
             icsfile.write(el.text)
     icsfile.close()
+    icsfile = open(filename, "rt")
+
+    # purge the file: remove from BEGIN:VCALENDAR to BEGIN:VEVENT included and the END:VCALENDAR referred except the first time
+    # Split the input data into separate VCALENDAR sections
+    old_cal = icsfile.read().strip().split("\n")
+    icsfile.close()
+    
+    # remove "" from the list
+    old_cal = [x for x in old_cal if x]
+
+    # first section is the header, keep it
+    header= []
+    for x in old_cal:
+        if x=="BEGIN:VEVENT":
+            break
+        else:
+            header.append(x)
+
+    # remove everything until the first BEGIN:VEVENT
+    events=[]
+    for x in old_cal:
+        if not x in header and x != "END:VCALENDAR":
+            events.append(x)
+        else:
+            continue
+
+    new_cal = header + events + ["END:VCALENDAR"]
+
+    # Write the combined content to a new .ics file
+    with open(filename, "w") as old_cal:
+        old_cal.write("\n".join(new_cal))
+        old_cal.close()
 
 course_code = ask_cc()
 response = fetch_cal(course_code)
